@@ -4,7 +4,7 @@ import { listType } from '@/types/sharedType'
 // 创建context: 定义类型 + 初始值
 type TodoListContextType = {
   todoList: listType[] | []
-  activeId: number | null
+  activeId: number
   setActiveId: (id: number) => void
   addProject: (project: string) => void
   delProject: (id: number) => void

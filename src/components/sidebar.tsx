@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import { Plus } from 'lucide-react'
 import useTodoList from '@/context/hooks'
-import SidebarItem from './draggable'
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
+import SidebarItem from './sidebarItem'
+
 export default function Sidebar() {
   // input
   const [value, setValue] = useState<string>('')
@@ -46,11 +45,7 @@ export default function Sidebar() {
         {todoList.length === 0 ? (
           <div className="text-gray-400 text-sm text-center">No projects</div>
         ) : (
-          <DndProvider backend={HTML5Backend}>
-            {todoList.map((item, index) => (
-              <SidebarItem project={item} key={item.id} index={index} />
-            ))}
-          </DndProvider>
+          todoList.map((item, index) => <SidebarItem project={item} key={item.id} index={index} />)
         )}
       </div>
     </div>

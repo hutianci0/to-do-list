@@ -107,6 +107,7 @@ export const TodoListProvider = ({ children }: { children: React.ReactNode }) =>
 ### react-dnd
 
 - 拖拽本质是修改状态
+- 一般是创建一个 DropBox 传递 props,再遍历 list 创建一个 DragItem(unqie ref)
 - 使用 react-dnd 创建排序列表
 
 1. 下载 react-dnd 和 react-dnd-html5-backend
