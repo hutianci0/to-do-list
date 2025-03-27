@@ -84,6 +84,21 @@ export const TodoListProvider = ({ children }: { children: React.ReactNode }) =>
     localStorage.setItem('todoList', JSON.stringify(changedList))
   }
 
+  const handleMove = (dragIndex: number, hoverIndex: number) => {
+    setTodoList((prevList) => {
+      const updatedList = [...prevList]
+      if (dragIndex === -1 || hoverIndex === -1 || dragIndex === hoverIndex) {
+        return updatedList
+      }
+      const draggedItem = updatedList[dragIndex]
+      updatedList.splice(dragIndex, 1)
+      updatedList.splice(hoverIndex, 0, draggedItem)
+
+      localStorage.setItem('todoList', JSON.stringify(updatedList))
+      return updatedList
+    })
+  }
+
   return (
     <TodoListContext.Provider
       value={{
@@ -95,6 +110,7 @@ export const TodoListProvider = ({ children }: { children: React.ReactNode }) =>
         addTask,
         delTask,
         toggleComplete,
+        handleMove,
       }}
     >
       {children}

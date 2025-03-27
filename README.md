@@ -107,3 +107,101 @@ export const TodoListProvider = ({ children }: { children: React.ReactNode }) =>
 ### react-dnd
 
 - 拖拽本质是修改状态
+- 使用 react-dnd 创建排序列表
+
+1. 下载 react-dnd 和 react-dnd-html5-backend
+2. DNDprovider 包裹拖移组件 backend 为 html5
+3. useDrag Hook<br>
+
+- `type`: 特定标识
+- `item`: 被拖拽的元素的属性
+- `collect(monitor)`: 返回一个对象, 包含被拖拽元素的状态 -`drag(ref)`(useRef 绑定元素)
+
+```jsx
+const [{ isDragging }, drag] = useDrag(() => ({
+  type: 'sidebar',
+  item: { id: project.id, index },
+  collect: (monitor) => ({
+    isDragging: monitor.isDragging(),
+  }),
+}))
+```
+
+4. useDrop Hook:
+
+- `accept`: 接受拖拽的类型与`type`一致
+- `collect(monitor)`: 返回一个对象, 包含被拖拽元素的状态
+- `handlerId`: 通过 data-handler-id 绑定
+- drop(ref) (useRef 绑定元素)
+- `hover`: 鼠标悬停时触发
+
+```jsx
+  const [{ handlerId }, drop] = useDrop<
+    { id: number; index: number },
+    void,
+    { handlerId: Identifier | null }
+  >(
+    () => ({
+      accept: 'sidebar',
+      collect: (monitor) => ({ handlerId: monitor.getHandlerId() }),
+      hover: (item: { index: number }, monitor) => {
+        const dragIndex = item.index
+        const hoverIndex = index
+
+        // 获取 hover 目标的位置信息
+        const hoverBoundingRect = ref.current!.getBoundingClientRect()
+        const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
+
+        // 获取鼠标位置
+        const clientOffset = monitor.getClientOffset()
+        if (!clientOffset) return
+        const hoverClientY = clientOffset.y - hoverBoundingRect.top
+
+        // 向下拖拽，鼠标必须超过 hover 目标的一半高度
+        if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+          return
+        }
+
+        // 向上拖拽，鼠标必须低于 hover 目标的一半高度
+        if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+          return
+        }
+
+        if (dragIndex !== hoverIndex) {
+          handleMove(dragIndex, hoverIndex)
+        }
+
+        item.index = hoverIndex
+      },
+    }),
+    [todoList],
+  )
+```
+
+5. 列表排序
+   - 列表 item 添加`data-handler-id`属性, 既是 droppable 又是 draggable
+   - 拖拽元素添加`data-drag-id`属性
+
+### 排序逻辑
+
+- 拖拽时能获取拖拽的元素和 hover 的元素的 index
+  - 拖拽元素: 一般父组件传递(list.map(item,`index`))
+  - hover 元素: `collect(item,monitor)`中获取
+- 添加 threshold
+  1. 获取 hover 盒子的高度
+  2. 获取鼠标位置
+  3. 判断鼠标位置是否超过 hover 盒子的一半高度
+- 修改数组
+
+```js
+functionSwap(arr, index1, index2) {
+  const arrCopy = [...arr] // 复制
+  const drapItem = arrCopy[index1] // 删除dragItem
+  arrCopy.splice(index1, 1)
+  arrCopy.splice(index2, 0, drapItem) // 在index2位置插入
+
+  return arrCopy
+}
+```
+
+- <mark>最后讲 dragItem 的 index 更新为 hoverIndex</mark>

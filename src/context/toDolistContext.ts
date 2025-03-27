@@ -11,5 +11,6 @@ type TodoListContextType = {
   addTask: (taskName: string, projectId: number) => void
   delTask: (taskId: number, projectId: number) => void
   toggleComplete: (taskId: number, projectId: number) => void
+  handleMove: (dragIndex: number, index: number) => void
 }
 export const TodoListContext = createContext<TodoListContextType | undefined>(undefined)

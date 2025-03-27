@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { Plus } from 'lucide-react'
 import useTodoList from '@/context/hooks'
 import SidebarItem from './draggable'
-
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 export default function Sidebar() {
   // input
   const [value, setValue] = useState<string>('')
@@ -40,11 +41,16 @@ export default function Sidebar() {
       </form>
 
       {/* sidebarItem */}
+
       <div className="flex-1 overflow-y-auto">
         {todoList.length === 0 ? (
           <div className="text-gray-400 text-sm text-center">No projects</div>
         ) : (
-          todoList.map((item) => <SidebarItem project={item} key={item.id} />)
+          <DndProvider backend={HTML5Backend}>
+            {todoList.map((item, index) => (
+              <SidebarItem project={item} key={item.id} index={index} />
+            ))}
+          </DndProvider>
         )}
       </div>
     </div>
