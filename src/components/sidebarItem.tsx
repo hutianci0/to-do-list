@@ -57,13 +57,14 @@ export default function SidebarItem({ project, index }: { project: listType; ind
   )
 
   const opacity = isDragging ? 0 : 1
+
   drag(drop(ref))
 
   return (
     <div
       ref={ref}
       className={`flex justify-between items-center px-4 py-3 rounded-lg mb-2 cursor-pointer transition ${
-        activeId === project.id ? 'bg-cyan-600 text-white' : 'hover:bg-gray-800'
+        activeId === project.id ? 'bg-cyan-600 text-white' : 'hover:bg-rose-200'
       }`}
       onClick={() => setActiveId(project.id)}
       style={{ opacity }}

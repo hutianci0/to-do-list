@@ -19,7 +19,7 @@ export default function Main() {
   }
 
   const list = todoList.find((item) => item.id === activeId)
-  if (list === undefined) return <div className="text-gray-500 text-center">Add your project</div>
+  if (list === undefined) return <div className="text-gray-500 ">Add your project</div>
 
   return (
     <div className="w-full h-screen overflow-auto bg-white shadow-lg rounded-lg p-6">

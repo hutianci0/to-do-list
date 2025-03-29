@@ -3,11 +3,16 @@ import { useState } from 'react'
 import { listType } from '@/types/sharedType'
 // 创建wrapper
 export const TodoListProvider = ({ children }: { children: React.ReactNode }) => {
-  const [todoList, setTodoList] = useState<listType[] | []>(() =>
+  // todoList
+  const [todoList, setTodoList] = useState<listType[]>(() =>
     localStorage.getItem('todoList') ? JSON.parse(localStorage.getItem('todoList')!) : [],
   )
 
-  const [activeId, setActiveId] = useState<number | null>(todoList.length ? todoList[0].id : null)
+  // atciveId
+  const [activeId, setActiveId] = useState<number>(todoList.length ? todoList[0].id : -1)
+
+  // searchQuery
+  const [searchQuery, setSearchQuery] = useState<string>('')
 
   const addProject = (projectName: string) => {
     const newProject = { id: Date.now(), title: projectName, item: [] }
@@ -31,7 +36,7 @@ export const TodoListProvider = ({ children }: { children: React.ReactNode }) =>
       let newActiveId = activeId
       if (id === activeId) {
         if (updated.length === 0) {
-          newActiveId = null
+          newActiveId = -1
         } else if (deletedIndex > 0) {
           newActiveId = prev[deletedIndex - 1].id
         } else {
@@ -98,6 +103,17 @@ export const TodoListProvider = ({ children }: { children: React.ReactNode }) =>
       return updatedList
     })
   }
+  const filterList = (searchQuery: string) => {
+    if (!searchQuery.trim()) return []
+    return todoList
+      .map((project) => ({
+        ...project,
+        item: project.item.filter((item) =>
+          item.text.toLowerCase().includes(searchQuery.toLowerCase()),
+        ),
+      }))
+      .filter((project) => project.item.length > 0)
+  }
 
   return (
     <TodoListContext.Provider
@@ -111,6 +127,9 @@ export const TodoListProvider = ({ children }: { children: React.ReactNode }) =>
         delTask,
         toggleComplete,
         handleMove,
+        searchQuery,
+        setSearchQuery,
+        filterList,
       }}
     >
       {children}
