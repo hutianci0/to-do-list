@@ -206,3 +206,34 @@ functionSwap(arr, index1, index2) {
 ```
 
 - <mark>最后讲 dragItem 的 index 更新为 hoverIndex</mark>
+
+## 受控组件防抖
+
+- 通过管理更新 state 的频率实现防抖
+  useDebounce 函数
+
+```ts
+// 受控组件的防抖
+import { useState, useEffect } from 'react'
+export default function useDebounce<T>(value: T, delay: number) {
+  const [debounceValue, setDebounceValue] = useState(value)
+  useEffect(() => {
+    // dealy秒后更新value
+    const handler = setTimeout(() => {
+      setDebounceValue(value)
+    }, delay)
+    return () => clearTimeout(handler)
+  }, [value, delay])
+
+  return debounceValue
+}
+```
+
+使用:
+
+```tsx
+const [xxx, setXXX]=useState('')
+// 防抖
+const queryResult = useDebounce(xxx, 500)
+<input value={XXX} onChange={e=> setXXX(e.target.value)} />
+```

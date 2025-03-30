@@ -2,10 +2,11 @@ import { Input } from '@/components/ui/input'
 import useTodoList from '@/context/hooks'
 import { Search } from 'lucide-react'
 import { useState } from 'react'
+import useDebounce from '@/utils/debounce'
 
 export default function SearchTask() {
   const { searchQuery, setSearchQuery, filterList, setActiveId } = useTodoList()
-  const filteredList = filterList(searchQuery)
+  const filteredList = filterList(useDebounce(searchQuery, 300))
   const [isActive, setActive] = useState(false)
 
   return (
