@@ -3,6 +3,7 @@ import Main from './components/main'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import SearchTask from './components/SearchTask'
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 
 export default function App() {
   // const { activeId } = useTodoList()
@@ -13,19 +14,17 @@ export default function App() {
         <h3 className="font-bold ">To Do List</h3>
         <SearchTask />
       </header>
-      <DndProvider backend={HTML5Backend}>
-        <div className="grid grid-cols-12">
-          {' '}
-          {/* sidebar */}
-          <div className="col-span-3 shadow-md">
+
+      <SidebarProvider>
+        <DndProvider backend={HTML5Backend}>
+          <div className=" shadow-md">
             <Sidebar />
           </div>
           {/* ToItem */}
-          <div className="col-span-9">
-            <Main />
-          </div>
-        </div>
-      </DndProvider>
+          <SidebarTrigger size={'lg'} />
+          <Main />
+        </DndProvider>
+      </SidebarProvider>
     </>
   )
 }

@@ -48,12 +48,7 @@ export default function Main() {
         </button>
       </form>
 
-      {/* 任务列表
-      {list.item.length === 0 && (
-        <div className="text-gray-400 text-center text-sm mb-4">No tasks yet</div>
-      )} */}
-
-      <div className="h-full grid grid-cols-2 gap-4">
+      <div className="h-full grid md:grid-cols-2 sm:grid-cols-1 gap-4">
         <DropBox list={sortArr(list.item).unCompleted} isdone={false} activeId={activeId} />
         <DropBox list={sortArr(list.item).completed} isdone={true} activeId={activeId} />
       </div>
