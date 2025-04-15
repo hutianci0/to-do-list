@@ -7,7 +7,7 @@ import { Item } from '@/types/sharedType'
 interface DraggableItemProps {
   item: Item
   isdone: boolean
-  activeId: number
+  activeId: string
 }
 
 export default function DraggableItem({ item, isdone, activeId }: DraggableItemProps) {

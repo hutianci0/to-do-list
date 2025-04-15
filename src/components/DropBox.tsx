@@ -11,17 +11,17 @@ export default function DropBox({
 }: {
   list: Item[]
   isdone: boolean
-  activeId: number
+  activeId: string
 }) {
   const ref = useRef<HTMLDivElement>(null)
   const { toggleComplete } = useTodoContext()
 
-  const handleDrop = (item: { id: number }) => {
+  const handleDrop = (item: { id: string }) => {
     if (item.id === activeId) return
     toggleComplete(item.id, activeId)
   }
   const [, drop] = useDrop(
-    () => ({ accept: 'tdItem', drop: (item: { id: number }) => handleDrop(item) }),
+    () => ({ accept: 'tdItem', drop: (item: { id: string }) => handleDrop(item) }),
     [list],
   )
   drop(ref)
